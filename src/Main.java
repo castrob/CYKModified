@@ -1,5 +1,3 @@
-import com.sun.istack.internal.NotNull;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,7 +31,7 @@ public class Main {
      * @param entrada Linha contendo simbolo inicial e producoes
      * @return Objeto regra
      */
-    public static Regra parseRegra(@NotNull String entrada){
+    public static Regra parseRegra(String entrada){
         /*Separando simbolo inicial de producoes*/
         String[] splitEntrada = entrada.split("->");
         char simboloInicial = splitEntrada[0].charAt(0);
