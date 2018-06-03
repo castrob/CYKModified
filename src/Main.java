@@ -34,7 +34,7 @@ public class Main {
     public static Regra parseRegra(String entrada){
         /*Separando simbolo inicial de producoes*/
         String[] splitEntrada = entrada.split("->");
-        char simboloInicial = splitEntrada[0].charAt(0);
+        String simboloInicial = splitEntrada[0];
         String[] splitProducoes = splitEntrada[1].split("\\|");
 
         Regra regra = new Regra(simboloInicial);
@@ -77,7 +77,7 @@ public class Main {
                     g.addRegra(regra);
                 }
                 /*Lendo simbolo de partida da gramatica*/
-                char simboloPartida = br.readLine().charAt(0);
+                String simboloPartida = br.readLine();
                 g.setSimboloPartida(simboloPartida);
 
                 /*Mostrando gramatica lida*/

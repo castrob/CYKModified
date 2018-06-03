@@ -1,8 +1,8 @@
-S,A
+S',A
 a,b
-S->AA
+S'->AA
 A->AAA|bA|Ab|a
-S
+S'
 aa
 ab
 ababaa

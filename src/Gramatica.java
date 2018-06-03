@@ -12,27 +12,11 @@ import java.util.List;
 
 public class Gramatica {
 
-    char simboloPartida;
+    String simboloPartida;
     String naoTerminais;
     String terminais;
     List<Regra> regras;
 
-
-    /**
-     * Getter para simbolo de partida da gramatica
-     * @return simbolo de partida da gramatica
-     */
-    public char getSimboloPartida() {
-        return simboloPartida;
-    }
-
-    /**
-     * Setter para simbolo de partida da gramatica
-     * @param simboloPartida simbolo de partida da gramatica
-     */
-    public void setSimboloPartida(char simboloPartida) {
-        this.simboloPartida = simboloPartida;
-    }
 
     /**
      * Construtor para Gramatica
@@ -43,6 +27,22 @@ public class Gramatica {
         this.naoTerminais = naoTerminais;
         this.terminais = terminais;
         this.regras = new ArrayList<Regra>();
+    }
+
+    /**
+     * Getter para simbolo de partida da gramatica
+     * @return simbolo de partida da gramatica
+     */
+    public String getSimboloPartida() {
+        return simboloPartida;
+    }
+
+    /**
+     * Setter para simbolo de partida da gramatica
+     * @param simboloPartida simbolo de partida da gramatica
+     */
+    public void setSimboloPartida(String simboloPartida) {
+        this.simboloPartida = simboloPartida;
     }
 
     /**

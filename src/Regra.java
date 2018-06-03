@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Regra{
 
-    char simboloInicial;
+    String simboloInicial;
     List<String> producoes;
 
     /**
@@ -18,7 +18,7 @@ public class Regra{
      * @param simboloInicial Simbolo inicial da Regra
      * @param producoes Lista de Producoes
      */
-    public Regra(char simboloInicial, List<String> producoes) {
+    public Regra(String simboloInicial, List<String> producoes) {
         this.simboloInicial = simboloInicial;
         this.producoes = producoes;
     }
@@ -27,7 +27,7 @@ public class Regra{
      * Construtor Padrao
      * @param simboloInicial Simbolo Inicial da Regra
      */
-    public Regra(char simboloInicial) {
+    public Regra(String simboloInicial) {
         this.simboloInicial = simboloInicial;
         this.producoes = new ArrayList<String>();
     }
@@ -36,7 +36,7 @@ public class Regra{
      * Getter para SimboloInicial
      * @return simboloInicial
      */
-    public char getSimboloInicial() {
+    public String getSimboloInicial() {
         return simboloInicial;
     }
 
@@ -44,7 +44,7 @@ public class Regra{
      * Setter para Simbolo Inicial
      * @param simboloInicial Simbolo Inicial da Regra
      */
-    public void setSimboloInicial(char simboloInicial) {
+    public void setSimboloInicial(String simboloInicial) {
         this.simboloInicial = simboloInicial;
     }
 
