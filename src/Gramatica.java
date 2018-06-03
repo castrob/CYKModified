@@ -18,6 +18,10 @@ public class Gramatica {
     List<Regra> regras;
 
 
+    public Gramatica() {
+        regras = new ArrayList<Regra>();
+    }
+
     /**
      * Construtor para Gramatica
      * @param naoTerminais Caracteres nao terminais

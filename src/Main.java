@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Pontificia Universidade Catolica de Minas Gerais
@@ -11,6 +13,41 @@ import java.io.InputStreamReader;
  */
 
 public class Main {
+
+
+    /**
+     * 2nf
+     input: a CFG G = (N,Σ,S,→) in 2NF
+     Nullable(G) =
+     1    nullable : = ∅
+     2    todo : = ∅
+     3    for all A ∈ N do
+     4      occurs(A) : = ∅
+     5    for all A → B do
+     6      occurs(B) := occurs(B) ∪{ A }
+     7    for all A → BC do
+     8      occurs(B) := occurs(B) ∪{ 〈A,C〉}
+     9      occurs(C) := occurs(C) ∪{ 〈A,B 〉}
+     10    for all A → e do
+     11      nullable : = nullable ∪{A}
+     12      todo : = todo ∪{A}
+     13    while todo ≠ ∅ do
+     14      remove some B from todo
+     15      for all A, 〈A,C〉 ∈ occurs(B) with C ∈ nullable do
+     16        if A ∉ nullable then
+     17          nullable : = nullable ∪{A}
+     18          todo : = todo ∪{A}
+     19    return nullable
+     */
+
+
+    public static Gramatica formaAnulavel (Gramatica g){
+        return new Gramatica();
+    }
+
+
+
+
 
     /**
      * Metodo que ira ler um arquivo contendo uma gramatica e decidir se
