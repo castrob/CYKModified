@@ -1,7 +1,7 @@
 S,A
 a,b
-S->AA
-A->AAA|bA|Ab|a
+S->AAA
+A->AAAAA|bAb|Ab|a
 S
 aa
 ab

@@ -15,35 +15,7 @@ import java.util.List;
 public class Main {
 
 
-    /**
-     * 2nf
-     input: a CFG G = (N,Σ,S,→) in 2NF
-     Nullable(G) =
-     1    nullable : = ∅
-     2    todo : = ∅
-     3    for all A ∈ N do
-     4      occurs(A) : = ∅
-     5    for all A → B do
-     6      occurs(B) := occurs(B) ∪{ A }
-     7    for all A → BC do
-     8      occurs(B) := occurs(B) ∪{ 〈A,C〉}
-     9      occurs(C) := occurs(C) ∪{ 〈A,B 〉}
-     10    for all A → e do
-     11      nullable : = nullable ∪{A}
-     12      todo : = todo ∪{A}
-     13    while todo ≠ ∅ do
-     14      remove some B from todo
-     15      for all A, 〈A,C〉 ∈ occurs(B) with C ∈ nullable do
-     16        if A ∉ nullable then
-     17          nullable : = nullable ∪{A}
-     18          todo : = todo ∪{A}
-     19    return nullable
-     */
 
-
-    public static Gramatica formaAnulavel (Gramatica g){
-        return new Gramatica();
-    }
 
 
 
@@ -119,6 +91,8 @@ public class Main {
 
                 /*Mostrando gramatica lida*/
                 System.out.println("Gramatica lida: \n" + g);
+                g.formaNormalBinaria();
+                System.out.println("Gramatica 2NF: \n" + g);
 
                 /*TODO
                 * 1 - Passar da gramatica GLC para 2NF
