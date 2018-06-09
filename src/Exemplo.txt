@@ -1,8 +1,0 @@
-S,A
-a,b
-S->AAA
-A->AAAAA|bAb|Ab|a
-S
-aa
-ab
-ababaa

@@ -124,7 +124,6 @@ public class Regra{
      * Funcao para reduzir uma regra de uma GLC para forma binaria, para que a gramatica passe para 2NF
      * @return Regra reduzida para 2NF
      */
-
     public List<Regra> formaBinaria() {
         String simboloBinario = this.simboloInicial; /*Simbolo para novas regras binarias*/
         List<Regra> regrasBinarias = new ArrayList<Regra>(); /*Lista de regras binarias*/
@@ -158,4 +157,8 @@ public class Regra{
         regrasBinarias.set(0, this); /*atualizando o valor da primeira posicao da lista de regrasBinarias com regra original reduzida*/
     return regrasBinarias;
     }
+
+
+
+
 }

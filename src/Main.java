@@ -14,13 +14,6 @@ import java.util.List;
 
 public class Main {
 
-
-
-
-
-
-
-
     /**
      * Metodo que ira ler um arquivo contendo uma gramatica e decidir se
      * uma determinada sentenca pertence a essa LLC que a gramatica representa
@@ -93,10 +86,12 @@ public class Main {
                 System.out.println("Gramatica lida: \n" + g);
                 g.formaNormalBinaria();
                 System.out.println("Gramatica 2NF: \n" + g);
+                g.conjuntoAnulavel();
+                g.relacaoUnitaria();
 
                 /*TODO
-                * 1 - Passar da gramatica GLC para 2NF
-                * (Conj. Eg'')
+                * 1 - Passar da gramatica GLC para 2NF - OK
+                * (Conj. Eg'') - OK
                 *  Rel. Unitaria
                 *  Inv. Rel. ''
                 * 2 - CYKModified
