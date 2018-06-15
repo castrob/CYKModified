@@ -124,30 +124,22 @@ public class Regra{
      * Funcao para reduzir uma regra de uma GLC para forma binaria, para que a gramatica passe para 2NF
      * @return Regra reduzida para 2NF
      */
-    public List<Regra> formaBinaria() {
-        String simboloBinario = this.simboloInicial; /*Simbolo para novas regras binarias*/
+    public List<Regra> formaBinaria(List<String> naoTerminaisDisponiveis) {
         List<Regra> regrasBinarias = new ArrayList<Regra>(); /*Lista de regras binarias*/
         regrasBinarias.add(this); /*Adicionado a propria regra para garantir a primeira posicao na lista*/
         int indice = 0; /*Indice da producao s na lista de producoes, para alteracao do novo valor AAA <-> AA'*/
         for(String s : producoes){ /*Para cada producao s em producoes*/
             if(!isBinaria(s)){ /*Verifica se ja nao e' uma producao binaria*/
                 while (!isBinaria(s)){ /*enquanto nao for binaria, reduzir*/
-                    Regra rBinaria = new Regra(simboloBinario+="'"); /*regra que ira receber reducao vem com aspas na frente*/
+                    Regra rBinaria = new Regra(naoTerminaisDisponiveis.remove(0)); /*regra que ira receber reducao vem com aspas na frente*/
                     String novaProducao;
                     /*caso s ja tenha sido reduzido, e' necessario desconsiderar as aspas ao fazer o substring, portanto utilizado a funcao numberOf(s)*/
-                    if(s.contains("'"))
-                        novaProducao = s.substring(s.length()-numberOf(s));
-                    else
                         novaProducao = s.substring(s.length()-2);
 
                     rBinaria.producoes.add(novaProducao);
                     regrasBinarias.add(rBinaria);
 
                     /*caso s ja tenha sido reduzido, e' necessario desconsiderar as aspas ao fazer o substring, portanto utilizado a funcao numberOf(s)*/
-
-                    if(s.contains("'"))
-                        s = s.substring(0,s.length()-numberOf(s)) + rBinaria.simboloInicial;
-                    else
                         s = s.substring(0,s.length()-2) + rBinaria.simboloInicial;
                     this.producoes.set(indice,s);
                 }

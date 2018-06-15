@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,6 +29,34 @@ public class Main {
      *  Para maior entendimento, olhar arquivo src/Exemplo.txt
      */
 
+
+    static List<String> naoTerminais;
+    static List<String> terminais;
+    static List<String> codTerminais;
+
+    public static String parseProducao(String s){
+
+        s = fixRegex(s);
+
+        for(String a : terminais){
+            s = s.replaceAll(a, codTerminais.get(terminais.indexOf(a)));
+        }
+        return s;
+    }
+
+    public static String fixRegex(String s){
+        s = s.replaceAll("\\.", "r");
+        s = s.replaceAll("}", "s");
+        s = s.replaceAll("\\{", "t");
+        s = s.replaceAll("\\)", "u");
+        s = s.replaceAll("\\(", "v");
+        s = s.replaceAll("-", "w");
+        s = s.replaceAll("\\+", "x");
+        s = s.replaceAll("\\*", "y");
+        s = s.replaceAll("\\^", "z");
+        return s;
+    }
+
     /**
      * Metodo para fazer o parse para uma regra
      * @param entrada Linha contendo simbolo inicial e producoes
@@ -42,7 +71,7 @@ public class Main {
         Regra regra = new Regra(simboloInicial);
         /*Adicionando todas as producoes a regra*/
         for(int i = 0; i < splitProducoes.length; i++){
-            regra.addProducao(splitProducoes[i]);
+            regra.addProducao(parseProducao(splitProducoes[i]));
         }
         return regra;
     }
@@ -66,20 +95,33 @@ public class Main {
             br = new BufferedReader(fr);
 
             /* Fazendo parse do arquivo */
-            String naoTerminais = br.readLine(); /*Lendo nao terminais*/
-            String terminais = br.readLine(); /*Lendo terminais*/
-            if(naoTerminais != null && terminais != null){
-                naoTerminais = naoTerminais.replaceAll(",", "");/*Removendo virgulas*/
-                terminais = terminais.replaceAll(",", "");/*Removendo virgulas*/
+            String ntrm = br.readLine();
+            String trm = br.readLine();
+            if(ntrm != null && trm != null){
+                trm = fixRegex(trm);
+                System.out.println(trm);
+                String[]split = ntrm.split(",");
+                naoTerminais = new ArrayList<String>();
+                naoTerminais.addAll(Arrays.asList(split));
+                split = trm.split(",");
+                terminais = new ArrayList<String>();
+                terminais.addAll(Arrays.asList(split));
+
+                codTerminais = new ArrayList<String>();
+
+                for(int i = 97; i <= 122; i++){
+                    codTerminais.add((char)i+"");
+                }
+
                 /*Criando gramatica*/
-                g = new Gramatica(naoTerminais, terminais);
+                g = new Gramatica(naoTerminais, codTerminais);
                 /*Lendo conjunto de regras*/
                 while((line = br.readLine()) != null && line.contains("->")){
                     Regra regra = parseRegra(line);
                     g.addRegra(regra);
                 }
                 /*Lendo simbolo de partida da gramatica*/
-                String simboloPartida = br.readLine();
+                String simboloPartida = line;
                 g.setSimboloPartida(simboloPartida);
 
                 /*Mostrando gramatica lida*/
@@ -88,6 +130,10 @@ public class Main {
                 System.out.println("Gramatica 2NF: \n" + g);
                 g.conjuntoAnulavel();
                 g.relacaoUnitaria();
+                g.CYK(parseProducao(fixRegex("0123")));
+                g.CYK(parseProducao(fixRegex("23")));
+
+
 
                 /*TODO
                 * 1 - Passar da gramatica GLC para 2NF - OK
@@ -96,7 +142,6 @@ public class Main {
                 *  Inv. Rel. ''
                 * 2 - CYKModified
                 * 3 - Pertence ?*/
-
             }
         }catch (IOException e){
             e.printStackTrace();

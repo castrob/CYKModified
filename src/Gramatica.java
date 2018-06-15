@@ -13,11 +13,12 @@ import java.util.List;
 public class Gramatica {
 
     String simboloPartida; /*Simbolo que representa inicio da Gramatica*/
-    String naoTerminais; /*Todos os nao terminais presentes na gramatica*/
-    String terminais; /*Todos os terminais presentes na gramatica*/
+    List<String> naoTerminais; /*Todos os nao terminais presentes na gramatica*/
+    List<String> terminais; /*Todos os terminais presentes na gramatica*/
     List<Regra> regras; /*Lista de regras presentes na gramatica com producoes*/
     List<String> anulaveis; /*Lista de regras anulaveis*/
     List<String> relacaoUnitaria; /*Relacao unitaria da gramatica*/
+    List<String> naoTerminaisDisponiveis;
     List<String> relacaoUnitariaReversa; /*Reversa da relacao unitaria*/
 
     /**
@@ -32,10 +33,16 @@ public class Gramatica {
      * @param naoTerminais Caracteres nao terminais
      * @param terminais Caracteres Terminais
      */
-    public Gramatica(String naoTerminais, String terminais) {
+    public Gramatica(List<String> naoTerminais, List<String> terminais) {
         this.naoTerminais = naoTerminais;
         this.terminais = terminais;
+        this.naoTerminaisDisponiveis = new ArrayList<String>();
+        for(int i = 65; i <= 90; i++){
+            naoTerminaisDisponiveis.add(((char)i)+"");
+        }
+        naoTerminaisDisponiveis.removeAll(naoTerminais);
         this.regras = new ArrayList<Regra>();
+
     }
 
     /**
@@ -58,7 +65,7 @@ public class Gramatica {
      * Getter para nao terminais
      * @return String com nao-terminais
      */
-    public String getNaoTerminais() {
+    public List<String> getNaoTerminais() {
         return naoTerminais;
     }
 
@@ -66,7 +73,7 @@ public class Gramatica {
      * Setter para String de nao-terminais
      * @param naoTerminais String de nao-terminais
      */
-    public void setNaoTerminais(String naoTerminais) {
+    public void setNaoTerminais(List<String> naoTerminais) {
         this.naoTerminais = naoTerminais;
     }
 
@@ -74,7 +81,7 @@ public class Gramatica {
      * Getter para String de Terminais
      * @return String de terminais
      */
-    public String getTerminais() {
+    public List<String> getTerminais() {
         return terminais;
     }
 
@@ -82,7 +89,7 @@ public class Gramatica {
      * Setter para Terminais
      * @param terminais String com Terminais
      */
-    public void setTerminais(String terminais) {
+    public void setTerminais(List<String> terminais) {
         this.terminais = terminais;
     }
 
@@ -113,8 +120,8 @@ public class Gramatica {
      * Metodo para Adicionar um novo Nao-Terminal
      * @param naoTerminal nao-terminal a ser adicionado
      */
-    public void addNaoTerminais(char naoTerminal){
-        this.naoTerminais += naoTerminal;
+    public void addNaoTerminais(String naoTerminal){
+        this.naoTerminais.add(naoTerminal);
     }
 
     /**
@@ -218,6 +225,7 @@ public class Gramatica {
                         regra2 += producoes[i];
 
                     if(!isOnlyTerminal(regra1) && !isOnlyTerminal(regra2)){
+                        System.out.println(regra1);
                         ocorrencias[indexOf(regra1)] += r.getSimboloInicial() + regra2 +" ";
 //                        System.out.println(ocorrencias[indexOf(regra1)]);
                     }
@@ -272,16 +280,13 @@ public class Gramatica {
     public  void formaNormalBinaria(){
         List<Regra> regrasBinarias = new ArrayList<Regra>();
         for(Regra r : regras){
-            regrasBinarias.addAll(r.formaBinaria());
+            regrasBinarias.addAll(r.formaBinaria(naoTerminaisDisponiveis));
         }
 
         if(regrasBinarias.size() > this.regras.size()){
             this.setRegras(regrasBinarias);
-            this.naoTerminais = "";
-            for(int i = 0; i < this.regras.size(); i++){
-                this.naoTerminais += this.regras.get(i).simboloInicial;
-            }
-
+            for(Regra r : regras)
+                this.naoTerminais.add(r.simboloInicial);
         }
     }
 
@@ -328,6 +333,92 @@ public class Gramatica {
         this.relacaoUnitaria = relacaoUnitaria;
         System.out.println("Ûg: " + relacaoUnitariaReversa);
         this.relacaoUnitariaReversa = relacaoUnitariaReversa;
+    }
 
+
+        public List<String> criarFechoUnitario(String a){
+        List<String> fecho = new ArrayList<String>();
+        fecho.add(a);
+        List<String> tmp = new ArrayList<String>();
+        tmp.add(""+a);
+        while(tmp.size() != 0){
+            String var = tmp.get(0);
+            tmp.remove(0);
+            for(String s : relacaoUnitariaReversa){
+                if((s.charAt(1)+"").equals(var) ){
+                    if(!fecho.contains(s.charAt(3)+"")){
+                        tmp.add(s.charAt(3)+"");
+                        fecho.add(s.charAt(3)+"");
+                    }
+                }
+            }
+        }
+        return fecho;
+    }
+
+
+    public String listToString(List<String> str ){
+        String tmp = "";
+        for(String s : str){
+            tmp += s + ",";
+        }
+        return tmp.substring(0, tmp.length()-1);
+    }
+
+    public void CYK(String palavra) {
+        String[][] T = new String[palavra.length()][palavra.length()];
+        String[][] Tt = new String[palavra.length()][palavra.length()];
+
+        for(int i = 0; i < palavra.length(); i++){
+            for(int j = 0; j < palavra.length(); j++){
+                T[i][j] = "";
+                Tt[i][j] = "";
+            }
+        }
+
+        for(int i = 0; i < palavra.length(); i++) {
+            T[i][i] =  listToString(criarFechoUnitario(palavra.charAt(i)+""));
+        }
+
+        for(int j = 1; j <= palavra.length()-1; j++) {
+            for(int i = j-1; i >= 0; i--) {
+                for(int h = i; h <= j-1; h++) {
+                    for (Regra r : regras) {
+                        List<String> producoes = r.getProducoes();
+                        for (String s : producoes) {
+                            if(s.length() >= 2){
+                                String c1 = s.charAt(0) + "";
+                                String c2 = s.charAt(1) + "";
+                                if (T[i][h].contains(c1) && T[h + 1][j].contains(c2)) {
+                                    Tt[i][j] += r.getSimboloInicial();
+                                }
+                            }else if (s.length() == 1){
+                                String c1 = s.charAt(0) + "";
+                                if (T[i][h].contains(c1)) {
+                                    Tt[i][j] += r.getSimboloInicial();
+                                }
+                            }
+
+                        }
+                    }
+                    T[i][j] = listToString(criarFechoUnitario(Tt[i][j]));
+                }
+            }
+        }
+
+        for(int i = 0; i < palavra.length(); i++){
+            for(int j = 0; j < palavra.length();j++){
+                System.out.print(T[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+//        System.out.println((T[0][palavra.length()-1]));
+        System.out.println(this.simboloPartida);
+        if((T[0][palavra.length()-1].charAt(0)+"").equals(this.simboloPartida)) {
+            System.out.println("sim");
+        }else{
+            System.out.println("nao");
+        }
     }
 }
