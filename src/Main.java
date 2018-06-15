@@ -130,8 +130,11 @@ public class Main {
                 System.out.println("Gramatica 2NF: \n" + g);
                 g.conjuntoAnulavel();
                 g.relacaoUnitaria();
-                g.CYK(parseProducao(fixRegex("0123")));
-                g.CYK(parseProducao(fixRegex("23")));
+                System.out.println("Testando palavras: ");
+                while((line = br.readLine()) != null){
+                    System.out.println("Palavra: " + line);
+                    g.CYK(parseProducao(fixRegex(line)));
+                }
 
 
 

@@ -301,6 +301,7 @@ public class Gramatica {
         List<String> relacaoUnitariaReversa = new ArrayList<String>();
         for(Regra r : regras){
             for(String s : r.producoes){
+                /*Se for um unico elemento e nao for lambda e nem anulavel, crio a relacao unitaria e a reversa*/
                 if(s.length() == 1 && !s.equals("?") && !anulaveis.contains(s)){
                     String novaRelacao = "("+r.getSimboloInicial() + "," + s + ")";
                     if(!relacaoUnitaria.contains(novaRelacao))
@@ -308,20 +309,20 @@ public class Gramatica {
                     String novaRelacaoReversa = "("+ s + "," + r.getSimboloInicial() + ")";
                     if(!relacaoUnitariaReversa.contains(novaRelacaoReversa))
                         relacaoUnitariaReversa.add(novaRelacaoReversa);
+                    /*se for maior que um tenho que testar as possibilidades*/
                 }else if(s.length() > 1){
-                    String[] producoes = splitProducao(s);
-                    if(!anulaveis.contains(producoes[0]) && anulaveis.contains(producoes[1])){
-                        String novaRelacao = "("+r.getSimboloInicial() + "," + producoes[0] + ")";
+                    if(!anulaveis.contains(s.charAt(0)+"") && anulaveis.contains(s.charAt(1)+"")){
+                        String novaRelacao = "("+r.getSimboloInicial() + "," + s.charAt(0) + ")";
                         if(!relacaoUnitaria.contains(novaRelacao))
                             relacaoUnitaria.add(novaRelacao);
-                        String novaRelacaoReversa = "("+ producoes[0] + "," + r.getSimboloInicial() + ")";
+                        String novaRelacaoReversa = "("+ s.charAt(0) + "," + r.getSimboloInicial() + ")";
                         if(!relacaoUnitariaReversa.contains(novaRelacaoReversa))
                             relacaoUnitariaReversa.add(novaRelacaoReversa);
-                    }else if(anulaveis.contains(producoes[0]) && !anulaveis.contains(producoes[1])){
-                        String novaRelacao = "("+r.getSimboloInicial() + "," + producoes[1] + ")";
+                    }else if(anulaveis.contains(s.charAt(0)+"")){
+                        String novaRelacao = "("+r.getSimboloInicial() + "," + s.charAt(1) + ")";
                         if(!relacaoUnitaria.contains(novaRelacao))
                             relacaoUnitaria.add(novaRelacao);
-                        String novaRelacaoReversa = "("+ producoes[1] + "," + r.getSimboloInicial() + ")";
+                        String novaRelacaoReversa = "("+ s.charAt(1) + "," + r.getSimboloInicial() + ")";
                         if(!relacaoUnitariaReversa.contains(novaRelacaoReversa))
                             relacaoUnitariaReversa.add(novaRelacaoReversa);
                     }
@@ -357,6 +358,17 @@ public class Gramatica {
     }
 
 
+    public String fechoUnitario(String s){
+        String[] split = s.split(" ");
+        String resposta = "";
+        for(String t : split){
+            resposta += listToString(criarFechoUnitario(t));
+        }
+
+        return resposta;
+    }
+
+
     public String listToString(List<String> str ){
         String tmp = "";
         for(String s : str){
@@ -377,7 +389,8 @@ public class Gramatica {
         }
 
         for(int i = 0; i < palavra.length(); i++) {
-            T[i][i] =  listToString(criarFechoUnitario(palavra.charAt(i)+""));
+            //T[i][i] =  listToString(criarFechoUnitario(palavra.charAt(i)+""));
+            T[i][i] =  fechoUnitario(palavra.charAt(i)+"");
         }
 
         for(int j = 1; j <= palavra.length()-1; j++) {
@@ -390,18 +403,12 @@ public class Gramatica {
                                 String c1 = s.charAt(0) + "";
                                 String c2 = s.charAt(1) + "";
                                 if (T[i][h].contains(c1) && T[h + 1][j].contains(c2)) {
-                                    Tt[i][j] += r.getSimboloInicial();
+                                    Tt[i][j] += r.getSimboloInicial() + " ";
                                 }
-                            }else if (s.length() == 1){
-                                String c1 = s.charAt(0) + "";
-                                if (T[i][h].contains(c1)) {
-                                    Tt[i][j] += r.getSimboloInicial();
-                                }
-                            }
-
                         }
                     }
-                    T[i][j] = listToString(criarFechoUnitario(Tt[i][j]));
+                    }
+                    T[i][j] = fechoUnitario(Tt[i][j]);
                 }
             }
         }
@@ -412,10 +419,8 @@ public class Gramatica {
             }
             System.out.println();
         }
-
-//        System.out.println((T[0][palavra.length()-1]));
-        System.out.println(this.simboloPartida);
-        if((T[0][palavra.length()-1].charAt(0)+"").equals(this.simboloPartida)) {
+        System.out.println();
+        if((T[0][palavra.length()-1]).contains(this.simboloPartida)) {
             System.out.println("sim");
         }else{
             System.out.println("nao");
